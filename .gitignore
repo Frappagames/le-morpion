@@ -15,11 +15,6 @@
 # Java class files
 *.class
 
-# generated files
-bin/
-gen/
-out/
-
 # Local configuration file (sdk path, etc)
 local.properties
 
@@ -29,3 +24,35 @@ local.properties
 
 # Log files
 .log
+
+# Temporary Files
+*~
+.*.swp
+.DS_STORE
+
+.gradle/
+build/
+bin/
+target/
+obj/
+out/
+classes/
+.gwt/
+gwt-unitCache/
+war/
+gen/
+gen-external-apklibs/
+armeabi/
+armeabi-v7a/
+linux32/
+linux64/
+windows32/
+windows64/
+macosx32/
+ios32/
+Debug/
+Release/
+x64/
+x86/
+ipch/
+/dist
