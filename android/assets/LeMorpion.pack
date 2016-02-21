@@ -206,13 +206,6 @@ playerOneName
   orig: 200, 45
   offset: 0, 0
   index: -1
-scoreSeparator
-  rotate: false
-  xy: 1453, 1363
-  size: 200, 45
-  orig: 200, 45
-  offset: 0, 0
-  index: -1
 playerTwoName
   rotate: false
   xy: 1251, 1269
@@ -232,5 +225,12 @@ crossSmall
   xy: 931, 837
   size: 96, 96
   orig: 96, 96
+  offset: 0, 0
+  index: -1
+scoreSeparator
+  rotate: false
+  xy: 1083, 989
+  size: 30, 96
+  orig: 30, 96
   offset: 0, 0
   index: -1
