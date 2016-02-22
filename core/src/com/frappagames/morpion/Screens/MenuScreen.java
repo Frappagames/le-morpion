@@ -3,7 +3,6 @@ package com.frappagames.morpion.Screens;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -12,7 +11,7 @@ import com.frappagames.morpion.Morpion;
 /**
  * Created by jmoreau on 11/01/16.
  */
-public class MenuScreen extends GameScreen {
+public class MenuScreen extends com.frappagames.morpion.Tools.GameScreen {
     private Image newLbl;
     private ImageButton onePlayerBtn;
     private ImageButton twoPlayerBtn;
@@ -28,7 +27,7 @@ public class MenuScreen extends GameScreen {
         twoPlayerBtn = new ImageButton(new TextureRegionDrawable(game.atlas.findRegion("twoPlayerBtn")));
         decosImg     = new Image(new TextureRegionDrawable(game.atlas.findRegion("decos")));
 
-        game.whoIsOlaying = 0;
+        game.whoIsPlaying = 0;
 
         VerticalGroup vg = new VerticalGroup();
         vg.addActor(newLbl);

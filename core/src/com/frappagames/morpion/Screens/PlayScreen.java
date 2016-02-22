@@ -9,15 +9,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.frappagames.morpion.Morpion;
+import com.frappagames.morpion.Tools.BoxActor;
 
 /**
+ * Play screen and board
  * Created by jmoreau on 11/01/16.
  */
-public class PlayScreen extends GameScreen {
+public class PlayScreen extends com.frappagames.morpion.Tools.GameScreen {
     private Image titleImg;
     private Image gridImg;
     private Image scoreLbl;
@@ -30,6 +33,7 @@ public class PlayScreen extends GameScreen {
     private Image player2Name;
     private Image player1Txt;
     private Image player2Txt;
+    private Image playerTxt;
     private Image separator;
     private Image playTxt;
     private Image winTxt;
@@ -38,15 +42,17 @@ public class PlayScreen extends GameScreen {
     private Label score1Lbl;
     private Label score2Lbl;
 
+    private TextureRegionDrawable cross;
+    private TextureRegionDrawable circle;
+
+    private int[] board;
+
 
     public PlayScreen(final Morpion game, final int nbPlayers, final int difficulty) {
         super(game);
+        changePlayer();
 
-        if (game.whoIsOlaying == 1) {
-            game.whoIsOlaying = 2;
-        } else {
-            game.whoIsOlaying = 1;
-        }
+        board = new int[9];
 
         titleImg    = new Image(new TextureRegionDrawable(game.atlas.findRegion("title")));
         gridImg     = new Image(new TextureRegionDrawable(game.atlas.findRegion("grid")));
@@ -98,11 +104,12 @@ public class PlayScreen extends GameScreen {
         vgOName.addActor(player2Name);
 
         VerticalGroup vgText = new VerticalGroup();
-        if (game.whoIsOlaying == 1) {
-            vgText.addActor(player1Txt);
+        if (game.whoIsPlaying == 1) {
+            playerTxt = player1Txt;
         } else {
-            vgText.addActor(player2Txt);
+            playerTxt = player2Txt;
         }
+        vgText.addActor(playerTxt);
         vgText.addActor(playTxt);
 
 
@@ -136,24 +143,95 @@ public class PlayScreen extends GameScreen {
             }
         });
 
+        BaseDrawable drawable = new BaseDrawable();
+        drawable.setMinWidth(150);
+        drawable.setMinHeight(150);
+
 
         Table gameBoard = new Table();
         gameBoard.setFillParent(true);
         gameBoard.padTop(35);
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("circle")))).pad(25, 30, 25, 30);
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("cross")))).pad(25, 30, 25, 30);
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("cross")))).pad(25, 30, 25, 30);
-        gameBoard.row();
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("cross")))).pad(25, 30, 25, 30);
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("circle")))).pad(25, 30, 25, 30);
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("cross")))).pad(25, 30, 25, 30);
-        gameBoard.row();
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("circle")))).pad(25, 30, 25, 30);
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("cross")))).pad(25, 30, 25, 30);
-        gameBoard.add(new Image(new TextureRegionDrawable(game.atlas.findRegion("circle")))).pad(25, 30, 25, 30);
-        gameBoard.row();
+
+        for (int i = 1; i <= 9; i++) {
+            BoxActor button = new BoxActor(drawable, i, game, this);
+            gameBoard.add(button).pad(25, 30, 25, 30);
+            if (i % 3 == 0) gameBoard.row();
+        }
 
         stage.addActor(gameBoard);
+    }
+
+    public void changePlayer() {
+        if (game.whoIsPlaying == 1) {
+            game.whoIsPlaying = 2;
+            playerTxt = player2Txt;
+        } else {
+            game.whoIsPlaying = 1;
+            playerTxt = player1Txt;
+        }
+    }
+    public void playerPlay(int cell) {
+        board[cell] = game.whoIsPlaying;
+        if (hasPlayerWin()) {
+
+        } else if(gameIsDraw()) {
+
+        } else {
+            changePlayer();
+        }
+    }
+
+    private boolean gameIsDraw() {
+        for (int i = 0; i < 9; i++) {
+            if (board[i] == 0) return false;
+        }
+        return true;
+    }
+
+    private boolean hasPlayerWin() {
+        for (int i = 0; i < 3; i++) {
+            // test lines
+            if (board[i * 3] == game.whoIsPlaying
+                    && board[i * 3 + 1] == game.whoIsPlaying
+                    && board[i * 3 + 2] == game.whoIsPlaying) {
+                showWin("line", i);
+                return true;
+            }
+
+            // test columns
+            if (board[i] == game.whoIsPlaying
+                    && board[i + 3] == game.whoIsPlaying
+                    && board[i + 6] == game.whoIsPlaying) {
+                showWin("colomn", i);
+                return true;
+            }
+        }
+        // test diagonal DESC
+        if (board[0] == game.whoIsPlaying
+                && board[4] == game.whoIsPlaying
+                && board[8] == game.whoIsPlaying) {
+            showWin("diagonal", 0);
+            return true;
+        }
+        // test diagonal ASC
+        if (board[3] == game.whoIsPlaying
+                && board[4] == game.whoIsPlaying
+                && board[6] == game.whoIsPlaying) {
+            showWin("diagonal", 1);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void showWin(String line, int number) {
+        if (line == "line") {
+
+        } else if (line == "colomn") {
+
+        } else if (line == "diagonal") {
+
+        }
     }
 
     @Override

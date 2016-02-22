@@ -11,7 +11,7 @@ import com.frappagames.morpion.Morpion;
 /**
  * Created by jmoreau on 11/01/16.
  */
-public class DifficultyScreen extends GameScreen {
+public class DifficultyScreen extends com.frappagames.morpion.Tools.GameScreen {
     private ImageButton easyBtn;
     private ImageButton normalBtn;
     private ImageButton hardBtn;

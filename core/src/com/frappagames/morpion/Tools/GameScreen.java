@@ -1,4 +1,4 @@
-package com.frappagames.morpion.Screens;
+package com.frappagames.morpion.Tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.frappagames.morpion.Morpion;
 
 /**
+ * Default game screen
  * Created by jmoreau on 12/01/16.
  */
 public class GameScreen implements Screen {
