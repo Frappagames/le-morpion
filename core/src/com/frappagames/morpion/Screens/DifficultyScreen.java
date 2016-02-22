@@ -38,17 +38,17 @@ public class DifficultyScreen extends GameScreen {
 
         easyBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game, 2, 1));
+                game.setScreen(new PlayScreen(game, 1, 1));
             }
         });
         normalBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game, 2, 2));
+                game.setScreen(new PlayScreen(game, 1, 2));
             }
         });
         hardBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game, 2, 3));
+                game.setScreen(new PlayScreen(game, 1, 3));
             }
         });
     }

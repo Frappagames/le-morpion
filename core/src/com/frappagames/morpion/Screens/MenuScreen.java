@@ -28,6 +28,8 @@ public class MenuScreen extends GameScreen {
         twoPlayerBtn = new ImageButton(new TextureRegionDrawable(game.atlas.findRegion("twoPlayerBtn")));
         decosImg     = new Image(new TextureRegionDrawable(game.atlas.findRegion("decos")));
 
+        game.whoIsOlaying = 0;
+
         VerticalGroup vg = new VerticalGroup();
         vg.addActor(newLbl);
         vg.addActor(onePlayerBtn);
@@ -39,12 +41,12 @@ public class MenuScreen extends GameScreen {
 
         onePlayerBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game, 1, 0));
+                game.setScreen(new DifficultyScreen(game));
             }
         });
         twoPlayerBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new DifficultyScreen(game));
+                game.setScreen(new PlayScreen(game, 2, 0));
             }
         });
     }

@@ -15,6 +15,7 @@ public class Morpion extends Game {
 	public static final String TITLE = "Le Morpion";
 	public SpriteBatch batch;
 	public TextureAtlas atlas;
+	public char whoIsOlaying;
 	
 	@Override
 	public void create () {
