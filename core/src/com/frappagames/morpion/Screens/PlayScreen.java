@@ -214,7 +214,7 @@ public class PlayScreen extends com.frappagames.morpion.Tools.GameScreen {
             return true;
         }
         // test diagonal ASC
-        if (board[3] == game.whoIsPlaying
+        if (board[2] == game.whoIsPlaying
                 && board[4] == game.whoIsPlaying
                 && board[6] == game.whoIsPlaying) {
             showWin("diagonal", 1);
