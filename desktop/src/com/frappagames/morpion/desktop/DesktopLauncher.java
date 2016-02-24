@@ -7,9 +7,9 @@ import com.frappagames.morpion.Morpion;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.height = 640;
-		config.width = 360;
-		config.title = "Le Morpion";
+		config.height = Morpion.height / 2;
+		config.width = Morpion.width / 2;
+		config.title = Morpion.TITLE;
 		new LwjglApplication(new Morpion(), config);
 	}
 }

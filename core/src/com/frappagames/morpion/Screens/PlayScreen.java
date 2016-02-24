@@ -13,86 +13,88 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.frappagames.morpion.Morpion;
 import com.frappagames.morpion.Tools.BoxActor;
+import com.frappagames.morpion.Tools.IA;
 
 /**
  * Play screen and board
  * Created by jmoreau on 11/01/16.
  */
 public class PlayScreen extends com.frappagames.morpion.Tools.GameScreen {
-    private Image titleImg;
-    private Image gridImg;
-    private Image scoreLbl;
-    private ImageButton menuBtn;
-    private ImageButton newBtn;
 
-    private Image xName;
-    private Image oName;
-    private Image player1Name;
-    private Image player2Name;
-    private Image player1Txt;
-    private Image player2Txt;
+    private TextureRegionDrawable player1Txt;
+    private TextureRegionDrawable player2Txt;
+    private TextureRegionDrawable playTxt;
+    private TextureRegionDrawable winTxt;
+    private Image playOrWin;
     private Image playerTxt;
-    private Image separator;
-    private Image playTxt;
-    private Image winTxt;
-
-    private BitmapFont font;
+    private final Image drawTxt;
     private Label score1Lbl;
     private Label score2Lbl;
-
-    private TextureRegionDrawable cross;
-    private TextureRegionDrawable circle;
-
     private int[] board;
+    private BoxActor[] cells;
+    private VerticalGroup vgText;
+    private int nbPlayers;
+    private int gameDifficulty;
 
+    public boolean canPlay;
 
     public PlayScreen(final Morpion game, final int nbPlayers, final int difficulty) {
         super(game);
-        changePlayer();
+        this.nbPlayers = nbPlayers;
+        this.gameDifficulty = difficulty;
 
-        board = new int[9];
+        Image titleImg      = new Image(new TextureRegionDrawable(game.atlas.findRegion("title")));
+        Image gridImg       = new Image(new TextureRegionDrawable(game.atlas.findRegion("grid")));
+        Image scoreLbl      = new Image(new TextureRegionDrawable(game.atlas.findRegion("scoreLbl")));
+        ImageButton menuBtn = new ImageButton(new TextureRegionDrawable(game.atlas.findRegion("menuBtn")));
+        ImageButton newBtn  = new ImageButton(new TextureRegionDrawable(game.atlas.findRegion("newBtn")));
+        Image xName         = new Image(new TextureRegionDrawable(game.atlas.findRegion("crossSmall")));
+        Image oName         = new Image(new TextureRegionDrawable(game.atlas.findRegion("circleSmall")));
+        Image separator     = new Image(new TextureRegionDrawable(game.atlas.findRegion("scoreSeparator")));
+        Image player1Name;
+        Image player2Name;
 
-        titleImg    = new Image(new TextureRegionDrawable(game.atlas.findRegion("title")));
-        gridImg     = new Image(new TextureRegionDrawable(game.atlas.findRegion("grid")));
-        scoreLbl    = new Image(new TextureRegionDrawable(game.atlas.findRegion("scoreLbl")));
-        menuBtn     = new ImageButton(new TextureRegionDrawable(game.atlas.findRegion("menuBtn")));
-        newBtn      = new ImageButton(new TextureRegionDrawable(game.atlas.findRegion("newBtn")));
-        xName       = new Image(new TextureRegionDrawable(game.atlas.findRegion("crossSmall")));
-        oName       = new Image(new TextureRegionDrawable(game.atlas.findRegion("circleSmall")));
-        separator   = new Image(new TextureRegionDrawable(game.atlas.findRegion("scoreSeparator")));
-        playTxt     = new Image(new TextureRegionDrawable(game.atlas.findRegion("playLbl")));
-        winTxt      = new Image(new TextureRegionDrawable(game.atlas.findRegion("winLbl")));
+        canPlay     = true;
+        board       = new int[9];
+        cells       = new BoxActor[9];
+        playTxt     = new TextureRegionDrawable(game.atlas.findRegion("playLbl"));
+        winTxt      = new TextureRegionDrawable(game.atlas.findRegion("winLbl"));
+        drawTxt     = new Image(new TextureRegionDrawable(game.atlas.findRegion("drawLbl")));
+        playerTxt   = new Image();
+        playOrWin   = new Image(playTxt);
+        vgText      = new VerticalGroup();
 
         if (nbPlayers == 1) {
-            player1Txt  = new Image(new TextureRegionDrawable(game.atlas.findRegion("playerLbl")));
+            player1Txt  = new TextureRegionDrawable(game.atlas.findRegion("playerLbl"));
             player1Name = new Image(new TextureRegionDrawable(game.atlas.findRegion("playerName")));
 
-            if (difficulty == 1) {
+            if (gameDifficulty == 1) {
                 player2Name = new Image(new TextureRegionDrawable(game.atlas.findRegion("iaEasyName")));
-                player2Txt  = new Image(new TextureRegionDrawable(game.atlas.findRegion("iaEasyLbl")));
-            } else if (difficulty == 2) {
+                player2Txt  = new TextureRegionDrawable(game.atlas.findRegion("iaEasyLbl"));
+            } else if (gameDifficulty == 2) {
                 player2Name = new Image(new TextureRegionDrawable(game.atlas.findRegion("iaNormalName")));
-                player2Txt  = new Image(new TextureRegionDrawable(game.atlas.findRegion("iaNormalLbl")));
+                player2Txt  = new TextureRegionDrawable(game.atlas.findRegion("iaNormalLbl"));
             } else {
                 player2Name = new Image(new TextureRegionDrawable(game.atlas.findRegion("iaHardName")));
-                player2Txt  = new Image(new TextureRegionDrawable(game.atlas.findRegion("iaHardLbl")));
+                player2Txt  = new TextureRegionDrawable(game.atlas.findRegion("iaHardLbl"));
             }
         } else {
-            player1Txt  = new Image(new TextureRegionDrawable(game.atlas.findRegion("playerOneLbl")));
+            player1Txt  = new TextureRegionDrawable(game.atlas.findRegion("playerOneLbl"));
             player1Name = new Image(new TextureRegionDrawable(game.atlas.findRegion("playerOneName")));
-            player2Txt  = new Image(new TextureRegionDrawable(game.atlas.findRegion("playerTwoLbl")));
+            player2Txt  = new TextureRegionDrawable(game.atlas.findRegion("playerTwoLbl"));
             player2Name = new Image(new TextureRegionDrawable(game.atlas.findRegion("playerTwoName")));
         }
 
-        font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
+        BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"), false);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
 
-        score1Lbl = new Label("0", labelStyle);
+        score1Lbl = new Label(Integer.toString(game.score1), labelStyle);
         score1Lbl.setAlignment(Align.center);
 
-        score2Lbl = new Label("0", labelStyle);
+        score2Lbl = new Label(Integer.toString(game.score2), labelStyle);
         score2Lbl.setAlignment(Align.center);
 
         VerticalGroup vgXName = new VerticalGroup();
@@ -103,14 +105,8 @@ public class PlayScreen extends com.frappagames.morpion.Tools.GameScreen {
         vgOName.addActor(oName);
         vgOName.addActor(player2Name);
 
-        VerticalGroup vgText = new VerticalGroup();
-        if (game.whoIsPlaying == 1) {
-            playerTxt = player1Txt;
-        } else {
-            playerTxt = player2Txt;
-        }
         vgText.addActor(playerTxt);
-        vgText.addActor(playTxt);
+        vgText.addActor(playOrWin);
 
 
         Table hgTop = new Table();
@@ -139,7 +135,7 @@ public class PlayScreen extends com.frappagames.morpion.Tools.GameScreen {
 
         newBtn.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PlayScreen(game, nbPlayers, difficulty));
+                game.setScreen(new PlayScreen(game, nbPlayers, gameDifficulty));
             }
         });
 
@@ -155,29 +151,78 @@ public class PlayScreen extends com.frappagames.morpion.Tools.GameScreen {
         for (int i = 1; i <= 9; i++) {
             BoxActor button = new BoxActor(drawable, i, game, this);
             gameBoard.add(button).pad(25, 30, 25, 30);
+            cells[i - 1] = button;
             if (i % 3 == 0) gameBoard.row();
         }
 
         stage.addActor(gameBoard);
+
+        if (game.startPlayer == 2) {
+            game.startPlayer  = 1;
+            game.whoIsPlaying = 2;
+            playerTxt.setDrawable(player2Txt);
+
+            if (nbPlayers == 1) {
+                iaPlay();
+            }
+        } else {
+            game.startPlayer  = 2;
+            game.whoIsPlaying = 1;
+            playerTxt.setDrawable(player1Txt);
+        }
     }
 
     public void changePlayer() {
         if (game.whoIsPlaying == 1) {
             game.whoIsPlaying = 2;
-            playerTxt = player2Txt;
+            playerTxt.setDrawable(player2Txt);
+
+            if (nbPlayers == 1) {
+                iaPlay();
+            }
         } else {
             game.whoIsPlaying = 1;
-            playerTxt = player1Txt;
+            playerTxt.setDrawable(player1Txt);
         }
     }
+
+    private void iaPlay() {
+        canPlay = false;
+
+        IA computerIA = new IA(game.whoIsPlaying, gameDifficulty);
+        int cell = computerIA.getMove(board);
+
+        cells[cell].play(game.whoIsPlaying);
+
+        canPlay = true;
+
+        playerPlay(cell);
+    }
+
     public void playerPlay(int cell) {
         board[cell] = game.whoIsPlaying;
         if (hasPlayerWin()) {
+            playOrWin.setDrawable(winTxt);
 
+            if (game.whoIsPlaying == 1) game.score1++;
+            else                        game.score2++;
+
+            score1Lbl.setText(Integer.toString(game.score1));
+            score2Lbl.setText(Integer.toString(game.score2));
+            canPlay = false;
         } else if(gameIsDraw()) {
-
+            vgText.clear();
+            vgText.addActor(drawTxt);
+            canPlay = false;
         } else {
+            playOrWin.setDrawable(playTxt);
             changePlayer();
+        }
+
+        if (!canPlay) {
+            for (int i = 0; i < 9; i++) {
+                cells[i].removeListener(cells[i].listener);
+            }
         }
     }
 
@@ -225,20 +270,30 @@ public class PlayScreen extends com.frappagames.morpion.Tools.GameScreen {
     }
 
     private void showWin(String line, int number) {
-        if (line == "line") {
+        Image lineImg;
 
-        } else if (line == "colomn") {
-
-        } else if (line == "diagonal") {
-
+        if (line.equals("line")) {
+            lineImg = new Image(new TextureRegionDrawable(game.atlas.findRegion("horizontalBar")));
+            lineImg.setPosition((stage.getWidth() - 610) / 2, 812 - (200 * number));
+        } else if (line.equals("colomn")) {
+            lineImg = new Image(new TextureRegionDrawable(game.atlas.findRegion("verticalBar")));
+            lineImg.setPosition(((stage.getWidth() - 610) / 2) + (210 * number) + 85, 320);
+        } else {
+            if (number == 0) {
+                lineImg = new Image(new TextureRegionDrawable(game.atlas.findRegion("oblicBarDesc")));
+            } else {
+                lineImg = new Image(new TextureRegionDrawable(game.atlas.findRegion("oblicBarAsc")));
+            }
+            lineImg.setPosition((stage.getWidth() - 610) / 2, 315);
         }
+
+        stage.addActor(lineImg);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
     }
-
 
     @Override
     public void dispose() {

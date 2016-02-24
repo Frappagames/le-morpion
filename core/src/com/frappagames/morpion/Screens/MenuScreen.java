@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.frappagames.morpion.Morpion;
 
 /**
+ * Main menu of the game
  * Created by jmoreau on 11/01/16.
  */
 public class MenuScreen extends com.frappagames.morpion.Tools.GameScreen {
@@ -28,6 +29,8 @@ public class MenuScreen extends com.frappagames.morpion.Tools.GameScreen {
         decosImg     = new Image(new TextureRegionDrawable(game.atlas.findRegion("decos")));
 
         game.whoIsPlaying = 0;
+        game.startPlayer  = 1;
+        game.score1  = game.score2 = 0;
 
         VerticalGroup vg = new VerticalGroup();
         vg.addActor(newLbl);
